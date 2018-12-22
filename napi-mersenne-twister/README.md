@@ -30,4 +30,4 @@ shows average values (of the 10 values) for each column chart
 ![node@v10.9.0  |  Intel® Core™ i5-5200U 2.20GHz  |  x64 linux 4.4.0-137-generic](measurements/measurement-2018-12-22T19:28:43.583Z.png)
 ![node@v11.5.0  |  Intel® Core™ i5-5200U 2.20GHz  |  x64 linux 4.4.0-137-generic](measurements/measurement-2018-12-22T19:44:50.982Z.png)
 ![node@v10.8.0  |  Intel® Core™ i7-4770K 3.50GHz  |  x64 linux 4.4.0-139-generic](measurements/measurement-2018-12-22T20:33:25.233Z.png)
-
+![node@v10.9.0  |  Intel® Core™ i7-4770HQ 2.20GHz  |  x64 darwin 17.3.0](measurements/measurement-2018-12-22T20:41:47.117Z.png)
