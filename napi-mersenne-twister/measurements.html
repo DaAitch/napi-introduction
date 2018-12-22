@@ -1,0 +1,113 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <p>Open a <tt>measurement-...json</tt> file</p>
+    <input type="file" id="upload" />
+    <br /><br />
+    <div id="container" style="width:900px; height:400px;"></div>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    
+    <script>
+      
+      (async () => {
+
+        const collectSeriesNames = measurements => {
+          return Object.keys(measurements);
+        };
+
+        const collectCategories = measurements => {
+          const categories = new Set();
+          for (const name in measurements) {
+            for (const iterations in measurements[name]) {
+              categories.add(iterations);
+            }
+          }
+
+          const categoriesList = [];
+          for (const category of categories) {
+            categoriesList.push(category);
+          }
+
+          return categoriesList.sort((a, b) => {
+            return (+a) < (+b)
+              ? 1
+              : ((+b) > (+a) ? -1 : 0);
+          });
+        };
+
+        const showHighchart = json => {
+
+          const categories = collectCategories(json.measurements);
+          const seriesNames = collectSeriesNames(json.measurements);
+          const series = seriesNames.map(name => {
+            const data = categories.map(category => {
+              const values = json.measurements[name][category];
+              let sum = 0;
+              for (const value of values) {
+                sum += value;
+              }
+
+              return +(sum / values.length).toFixed(2);
+            });
+
+            return {
+              name,
+              data
+            };
+          });
+
+          Highcharts.chart('container', {
+            chart: {
+              type: 'column'
+            },
+            title: {
+              text: 'Mersenne Twister: ' + json.environment
+            },
+            xAxis: {
+              categories,
+              title: {
+                text: 'iterations'
+              }
+            },
+            yAxis: {
+              type: 'logarithmic',
+              title: {
+                text: 'duration in ms'
+              }
+            },
+            series,
+            plotOptions: {
+              column: {
+                dataLabels: {
+                  enabled: true
+                }
+              }
+            },
+            // exporting: {
+            //   buttons: {
+            //     contextButton: {
+            //       enabled: true,
+            //       text: 'test'
+            //     }
+            //   }
+            // }
+          });
+        };
+
+        /** @type {HTMLInputElement} */
+        const domUpload = document.getElementById('upload');
+        domUpload.addEventListener('change', event => {
+          const fr = new FileReader();
+          fr.readAsText(domUpload.files[0]);
+          fr.onload = loadEvent => {
+            showHighchart(JSON.parse(loadEvent.target.result));
+          };
+        });
+      })();
+      
+    </script>
+  </body>
+</html>
